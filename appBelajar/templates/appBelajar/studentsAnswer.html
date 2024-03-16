@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<form action="" method="get">
+    <input name="q" placeholder="Cari siswa">
+</form>
+
+
+<div style="overflow-x:auto;">
+    <table class="table-monitor">
+        <tr>
+            {% for header in headers %}
+            <th>{{header}}</th>
+            {% endfor %}
+        </tr>
+    
+        {% for rows in row_data %}
+        <tr>
+            {% for row in rows %}
+            <td>{{row}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<a href="{% url 'downloadAnswers' topic.id %}">unduh jawaban siswa</a>
+
+{% endblock %}

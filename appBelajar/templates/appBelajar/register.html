@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <form method="POST" class="form-group">
+	{% csrf_token %}
+	{% for field in form %}
+        <label for="room_name">{{field.label}}</label>
+        <p>{{field}}</p>
+        {% if forloop.counter == 3 %}
+            <small>password harus lebih dari 8 huruf</small><br>
+            <small>password harus mengandung angka</small><br>
+            <small>password harus mengandung huruf kapital</small><br>
+        {% endif %}
+	{% endfor %}
+	<button type="submit" class="btn btn-success">Buat Akun</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<form action="" method="get">
+    <input name="q" placeholder="Cari topik">
+</form>
+
+<a href="{% url 'createTopic' %}">Buat topik baru</a>
+
+<ol>
+    {% for topic in topics %}
+    <li><a href="{% url 'questionList' topic.id %}">{{topic}}</a>
+        <a href="{% url 'deleteTopic' topic.id %}">delete</a>
+        <a href="{% url 'studentsAnswer' topic.id %}">lihat jawaban siswa</a></li>
+    {% endfor %}
+</ol>
+
+{% endblock %}

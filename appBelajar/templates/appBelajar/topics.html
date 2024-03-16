@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h2>Pilih topik yang ingin kamu kerjakan</h2>
+<form action="" method="get">
+    <input name="q" placeholder="Cari topik">
+</form>
+
+<ul>
+    {% for topic in topics %}
+    <li><a href="{% url 'exercise' topic.id 1 %}">{{topic.name}}</a>
+        
+        {% if request.user in topic.participants.all %}
+        <a href="{% url 'myResult' topic.id %}">lihat hasil</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}
