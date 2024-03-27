@@ -1,17 +1,20 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="">Pertanyaan</label><br>
+<div class="updateQuestion-container">
+    <h1>Edit soal</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="">Ganti soal</label><br>
+        <textarea name="question" id="" cols="30" rows="8" placeholder="Tuliskan soal disini">{{question.question}}</textarea><br>
 
-    <textarea name="question" id="" cols="30" rows="8" placeholder="Tuliskan pertanyaan disini" >{{question.question}}</textarea><br>
+        <label for="">Gambar Pendukung (opsional)</label>
+        <input type="file" name="image"><br>
 
-    <label for="" >Ganti Gambar (bila perlu)</label>
-    <input type="file" name="image"><br>
-
-    <label for="">Deskripsi Gambar Pendukung (bila menyantumkan gambar)</label>
-    <input type="text" name="imageDescription" placeholder="Tuliskan deskripsi gambar disini" value="{{question.image_description}}"><br>
-    <button type="submit">Simpan</button>
-</form>
+        <label for="">Deskripsi Gambar Pendukung</label>
+        <input type="text" name="imageDescription"
+            placeholder="Contoh: 'Gambar pabrik yang mengeluarkan asap hitam' "><br>
+        <input type="submit" value="Ganti soal">
+    </form>
+</div>
 {% endblock %}

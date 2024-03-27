@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from collections import defaultdict
+from django.core.paginator import Paginator
 
 import re
 import time
@@ -23,17 +24,24 @@ def index(request):
 
 def topics(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topics.objects.filter(Q(name__icontains=q))
-    context = {'topics':topics}
+    topics = Topics.objects.filter(Q(name__icontains=q)).order_by('-id')
+    paginator = Paginator(topics, 5)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj':page_obj}
     return render(request, 'appBelajar/topics.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def topicList(request):
     
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topics.objects.filter(Q(name__icontains=q))
-    
-    context = {'topics':topics}
+    topics = Topics.objects.filter(Q(name__icontains=q)).order_by('-id')
+    paginator = Paginator(topics, 5)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj':page_obj}
     return render(request, 'appBelajar/topicList.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -164,6 +172,11 @@ def exercise(request, pk, number):
         text = text.strip()
 
         return text
+
+    def removeStar(text):
+        pattern = r"\*"
+        kalimat_tanpa_tanda_bintang = re.sub(pattern, "", text)
+        return kalimat_tanpa_tanda_bintang
     
     # handle form
     if request.method == "POST":
@@ -227,20 +240,22 @@ def exercise(request, pk, number):
         else:
 
             question_image = question.image_description
-            masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan saran perbaikan jawaban(maksimal 50 karakter) dan Skor(tulis 1 digit antara 0 sampai 5): "
+            # masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan saran perbaikan jawaban(maksimal 50 karakter) dan Skor(tulis 1 digit antara 0 sampai 5): "
+            masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan skor : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
             
             response = model.generate_content(masukan, generation_config=genai.types.GenerationConfig(candidate_count=1, top_p=0.7, top_k=4, max_output_tokens=100, temperature=1))
             print(response.prompt_feedback)
             feedback_temporary = to_markdown(response.text)
-            print(feedback_temporary, '<< the feedback')
+            feedback_fix = removeStar(feedback_temporary)
+            print(feedback_fix, '<< the feedback')
             
             
             time.sleep(3)
             try:
-                user_score = int(extract_score(feedback_temporary))
+                user_score = int(extract_score(feedback_fix))
             except:
                 user_score = 0
-            feedback = extract_feedback(feedback_temporary)
+            feedback = extract_feedback(feedback_fix)
             # try:
             # except:
             #     return HttpResponse('feedback tak diberikan')
@@ -268,8 +283,18 @@ def exerciseOver(request):
 def myResult(request, pk):
 
     results = Answers.objects.filter(user=request.user, topic_id=pk)
+    topic = Topics.objects.get(id=pk)
+    score = 0
 
-    context = {'results': results}
+    for result in results:
+        score += result.score
+    
+    try:
+        totalScore = int(score / (5*len(results))*100)
+    except:
+        totalScore = 0
+
+    context = {'results': results, 'score': totalScore, 'topic':topic}
     return render(request, 'appBelajar/myResult.html', context)
 
 def registerPage(response):

@@ -1,13 +1,16 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div style="overflow-x:auto;">
-    <table>
-        <tr>
-            <th>soal</th>
-            <th>jawabanmu</th>
-            <th>umpan balik</th>
-        </tr>
+<div class="myResult-container">
+    <h1>Topik: <span>{{topic|title}}</span></h1>
+
+    <table class="myResult-table">
+        <thead class="myResult-table-header">
+            <th>Soal</th>
+            <th>Jawabanku</th>
+            <th>Umpan Balik</th>
+        </thead>
+
         {% for result in results %}
         <tr>
             <td>{{result.question}}</td>
@@ -15,6 +18,7 @@
             <td>{{result.feedback}}</td>
         </tr>
         {% endfor %}
+    </table>
+    <p>Skor saya: <span>{{score}}</span></p>
 </div>
-</table>
 {% endblock %}

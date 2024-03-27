@@ -1,18 +1,50 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h2>Pilih topik yang ingin kamu kerjakan</h2>
-<form action="" method="get">
-    <input name="q" placeholder="Cari topik">
-</form>
+<div class="container-topic">
+    <h1>Pilih topik yang ingin kamu pelajari</h1>
 
-<ul>
-    {% for topic in topics %}
-    <li><a href="{% url 'exercise' topic.id 1 %}">{{topic.name}}</a>
-        
-        {% if request.user in topic.participants.all %}
-        <a href="{% url 'myResult' topic.id %}">lihat hasil</a></li>
-        {% endif %}
-    {% endfor %}
-</ul>
+    <form class="search-topic" action="">
+        <input name="q" placeholder="Cari topik">
+    </form>
+
+    <ul>
+        {% for topic in page_obj %}
+        <li>
+            <a href="{% url 'exercise' topic.id 1 %}" class="topic-item"><span>{{topic.name|title}}</span></a>
+
+            {% if request.user in topic.participants.all %}
+            <a href="{% url 'myResult' topic.id %}" class="myanswer"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24">
+                    <path
+                        d="M15 12c0 1.657-1.343 3-3 3s-3-1.343-3-3c0-.199.02-.393.057-.581 1.474.541 2.927-.882 2.405-2.371.174-.03.354-.048.538-.048 1.657 0 3 1.344 3 3zm-2.985-7c-7.569 0-12.015 6.551-12.015 6.551s4.835 7.449 12.015 7.449c7.733 0 11.985-7.449 11.985-7.449s-4.291-6.551-11.985-6.551zm-.015 12c-2.761 0-5-2.238-5-5 0-2.761 2.239-5 5-5 2.762 0 5 2.239 5 5 0 2.762-2.238 5-5 5z" />
+                </svg> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
+                </svg></a>
+            {% else %}
+            <p class="myanswer-yet"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
+                </svg></p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
 {% endblock %}

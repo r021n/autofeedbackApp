@@ -1,6 +1,24 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h2>Selamat, kamu sudah menyelesaikan latihan ini</h2>
-<p>Kembali ke <a href="{% url 'home' %}">home</a> atau kerjakan soal latihan <a href="{% url 'topics' %}">lainnya</a></p>
+<div class="container_end">
+    <svg width="236px" height="236px" class="ended" viewBox="0 0 236 236" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+        xmlns:serif="http://www.serif.com/"
+        style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+        <g transform="matrix(1,0,0,1,-1324.33,-824.875)">
+            <g transform="matrix(1,0,0,1,18.8574,71.6583)">
+                <circle cx="1423.33" cy="871.066" r="117.85" />
+            </g>
+            <g transform="matrix(-0.994874,-0.994874,0.994874,-0.994874,2394.19,3659.51)">
+                <path
+                    d="M1841.36,923.92C1841.36,929.415 1836.89,933.876 1831.4,933.876C1825.9,933.876 1821.44,929.415 1821.44,923.92L1821.44,863.673C1821.44,858.174 1825.9,853.717 1831.4,853.717L1870.02,853.717C1875.51,853.717 1879.97,858.178 1879.97,863.673C1879.97,869.168 1875.51,873.629 1870.02,873.629C1870.02,873.629 1841.36,873.629 1841.36,873.629L1841.36,923.92Z"
+                    style="fill:white;" />
+            </g>
+        </g>
+    </svg>
+    <h2 class="congrats">Horee, kamu sudah menyelesaikan topik ini</h2>
+    <p class="p_ended">Kembali ke <a href="{% url 'home' %}" class="home_link">Home</a> atau pelajari <a href="{% url 'topics' %}"
+            class="topic_link">Topik</a> lainnya</p>
+</div>
 {% endblock %}

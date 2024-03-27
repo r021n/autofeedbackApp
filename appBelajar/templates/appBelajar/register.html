@@ -1,17 +1,27 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <form method="POST" class="form-group">
-	{% csrf_token %}
-	{% for field in form %}
-        <label for="room_name">{{field.label}}</label>
-        <p>{{field}}</p>
-        {% if forloop.counter == 3 %}
-            <small>password harus lebih dari 8 huruf</small><br>
-            <small>password harus mengandung angka</small><br>
-            <small>password harus mengandung huruf kapital</small><br>
-        {% endif %}
-	{% endfor %}
-	<button type="submit" class="btn btn-success">Buat Akun</button>
-    </form>
+<div class="registerForm-container">
+    <div class="registerForm-page">
+        <h1>Buat Akun</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <label for="room_name">{{field.label}}</label>
+            <p>{{field}}</p>
+            {% if forloop.counter == 3 %}
+            <ul>
+                <li>password harus lebih dari 8 huruf</li>
+                <li>password harus mengandung angka</li>
+                <li>password harus mengandung huruf kapital</li>
+            </ul>
+            {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn-register">Buat Akun</button>
+        </form>
+        <p>sudah punya akun? <a href="{% url 'loginPage' %}">login</a></p>
+    </div>
+</div>
 {% endblock %}

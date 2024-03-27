@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h3>Jawab pertanyaan berikut dengan sungguh-sunguh</h3>
+
+{% if question.image %}
+<img style="height: 200px;" src="{{question.image.url}}" alt="">
+{% endif %}
+
+<p>{{question.question}}</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    
+    <textarea name="answer" id="" cols="40" rows="8">{{user_answer.answer}}</textarea>
+
+    {% if user_answer == None %}
+    <input type="submit" value="submit">
+    {% endif %}
+</form>
+
+<p>{{user_answer.feedback}}</p>
+
+<small>soal ke {{number}} dari {{questions_length}} soal</small>
+
+{% if user_answer != None %}
+    {% if number == questions_length %}
+    <a href="{% url 'exerciseOver' %}">selesai</a>
+    {% else %}
+    <a href="{% url 'exercise' question.topic_id number|add:1 %}">next</a>
+    {% endif %}
+{% endif %}
+
+{% endblock %}

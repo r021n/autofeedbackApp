@@ -1,13 +1,15 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<div class="createTopic-container">
+    <div class="createTopic-page">
+        <form action="" method="POST">
+            {% csrf_token %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-
-    <label for="">Masukan nama topik</label>
-    <input type="text" name="topic">
-    <input type="submit" value="submit">
-</form>
-
+            <label for="">Masukan nama topik</label>
+            <input type="text" name="topic" placeholder="Masukan nama topik">
+            <input type="submit" value="Tambahkan">
+        </form>
+    </div>
+</div>
 {% endblock %}

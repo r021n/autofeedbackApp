@@ -1,20 +1,19 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<div class="studentsAnswer-container">
+    <h1>Topik: <span>Perubahan Iklim</span></h1>
 
-<form action="" method="get">
-    <input name="q" placeholder="Cari siswa">
-</form>
-
-
-<div style="overflow-x:auto;">
-    <table class="table-monitor">
-        <tr>
+    <form class="search-topic" action="" method="get">
+        <input name="q" placeholder="Cari siswa">
+    </form>
+    <table class="studentsAnswer-table">
+        <thead class="stundentsAnswer-table-header">
             {% for header in headers %}
             <th>{{header}}</th>
             {% endfor %}
-        </tr>
-    
+        </thead>
+
         {% for rows in row_data %}
         <tr>
             {% for row in rows %}
@@ -23,8 +22,6 @@
         </tr>
         {% endfor %}
     </table>
+    <a href="{% url 'downloadAnswers' topic.id %}" class="download-answers">Unduh Jawaban Siswa</a>
 </div>
-
-<a href="{% url 'downloadAnswers' topic.id %}">unduh jawaban siswa</a>
-
 {% endblock %}

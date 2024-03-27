@@ -1,19 +1,21 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div>
-    <form action="" method="POST">
-        {% csrf_token %}
-    
-        <label for="">Username:</label>
-        <input type="text" name="username" placeholder="Enter username">
-    
-        <label for="">Password:</label>
-        <input type="password" name="password" placeholder="Enter password">
-    
-        <input type="submit" value="login">
-    </form>
-</div>
-<p>belum punya akun? <a href="{% url 'registerPage' %}">Buat akun</a></p>
+<div class="loginForm-container">
+    <div class="loginForm-page">
+        <h1>Login</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
 
+            <label for="">Username:</label>
+            <input type="text" name="username" placeholder="Enter username">
+
+            <label for="">Password:</label>
+            <input type="password" name="password" placeholder="Enter password">
+
+            <input type="submit" value="Login">
+        </form>
+        <p>belum punya akun? <a href="{% url 'registerPage' %}">Buat akun</a></p>
+    </div>
+</div>
 {% endblock %}

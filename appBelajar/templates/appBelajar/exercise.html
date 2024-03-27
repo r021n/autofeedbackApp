@@ -1,34 +1,37 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h3>Jawab pertanyaan berikut dengan sungguh-sunguh</h3>
+<div class="container_exercise">
+    <h1>Jawab pertanyan berikut</h1>
+    <div class="answer_form">
+        {% if question.image %}
+        <img src="{{question.image.url}}" alt="">
+        {% endif %}
 
-{% if question.image %}
-<img style="height: 200px;" src="{{question.image.url}}" alt="">
-{% endif %}
+        <p class="question">{{question.question}}</p>
+        <form class="answer_input" action="" method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <textarea name="answer" id="answer" cols="30" rows="10">{{user_answer.answer}}</textarea>
 
-<p>{{question.question}}</p>
-
-<form action="" method="POST">
-    {% csrf_token %}
-    
-    <textarea name="answer" id="" cols="40" rows="8">{{user_answer.answer}}</textarea>
-
-    {% if user_answer == None %}
-    <input type="submit" value="submit">
-    {% endif %}
-</form>
-
-<p>{{user_answer.feedback}}</p>
-
-<small>soal ke {{number}} dari {{questions_length}} soal</small>
-
-{% if user_answer != None %}
-    {% if number == questions_length %}
-    <a href="{% url 'exerciseOver' %}">selesai</a>
-    {% else %}
-    <a href="{% url 'exercise' question.topic_id number|add:1 %}">next</a>
-    {% endif %}
-{% endif %}
-
+            {% if user_answer == None %}
+            <div class="submit-container">
+                <input type="submit" value="Submit">
+            </div>
+            {% endif %}
+        </form>
+        <div class="feedback_section">
+            <p class="feedback" id="feedback">{{user_answer.feedback}}</p>
+            {% if user_answer != None %}
+                {% if number == questions_length %}
+                    <a class="next" href="{% url 'exerciseOver' %}">Selesai</a>
+                {% else %}
+                    <a class="next" href="{% url 'exercise' question.topic_id number|add:1 %}">Next</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <p class="question_progress">soal ke <i id="question_now">{{number}}</i> dari <i id="total_question">{{questions_length}}</i> soal</p>
+    <div class="progress" id="progressBar"></div>
+    <div class="progress_orange"></div>
+</div>
 {% endblock %}

@@ -1,0 +1,1484 @@
+@import url("https://fonts.cdnfonts.com/css/made-tommy-soft-outline?styles=59309,59310,59307,59308,59305,59306,59304");
+
+:root {
+  --green: #65b741;
+  --orange: #ffb534;
+  --blue: #28c9ed;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "MADE Tommy Soft", sans-serif;
+}
+
+/* Navbar CSS <================================ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+.top-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #00baf0;
+  background: var(--green);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: #fff;
+  height: 50px;
+  padding: 1em;
+}
+
+.home-logo {
+  margin-right: 2.2em;
+  color: white;
+  font-size: 1.7em;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu > li {
+  margin: 0 1rem;
+  font-size: 1.2em;
+  overflow: hidden;
+}
+
+.menu li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.menu li a:hover {
+  text-decoration: underline;
+}
+
+.login-logout-mobile {
+  display: none;
+}
+
+.login-logout {
+  background-color: white;
+  color: var(--green);
+  padding: 0.3em 1.5em;
+  border-radius: 20em;
+  font-size: 1.3em;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 0.5em;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-logout:hover {
+  background-color: var(--orange);
+  color: white;
+}
+
+.menu-button-container {
+  display: none;
+  height: 100%;
+  width: 30px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.menu-button,
+.menu-button::before,
+.menu-button::after {
+  display: block;
+  background-color: #fff;
+  position: absolute;
+  height: 4px;
+  width: 30px;
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  border-radius: 2px;
+}
+
+.menu-button::before {
+  content: "";
+  margin-top: -8px;
+}
+
+.menu-button::after {
+  content: "";
+  margin-top: 8px;
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button::before {
+  margin-top: 0px;
+  transform: rotate(405deg);
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button {
+  background: rgba(255, 255, 255, 0);
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button::after {
+  margin-top: 0px;
+  transform: rotate(-405deg);
+}
+
+@media (max-width: 700px) {
+  .menu-button-container {
+    display: flex;
+  }
+  .menu {
+    position: absolute;
+    top: 0;
+    margin-top: 5em;
+    left: 0;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  #menu-toggle ~ .menu li {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  #menu-toggle:checked ~ .menu li {
+    border: 1px solid var(--green);
+    height: 2.5em;
+    padding: 0.5em;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .login-logout {
+    display: none;
+  }
+  .menu > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0.5em 0;
+    width: 100%;
+    color: white;
+    background-color: var(--green);
+  }
+
+  .menu > li a {
+    padding: 0.7em 100%;
+  }
+
+  .menu > li:hover {
+    background-color: black;
+  }
+
+  .login-logout-mobile {
+    display: block;
+  }
+
+  .menu > li:last-child {
+    background-color: var(--orange);
+  }
+  .menu > li:last-child:hover {
+    background-color: black;
+  }
+}
+
+/* Home CSS <================================ */
+
+.container-home {
+  display: flex;
+  padding: 0 10%;
+  margin: 4.5em 0 0;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 94vh;
+}
+
+.left-side h2 {
+  color: var(--green);
+  font-size: 3.5rem;
+}
+
+.left-side p {
+  color: black;
+  font-size: 1.4rem;
+  margin: 1.3em 0 1.7em;
+}
+
+.left-side a {
+  text-decoration: none;
+  background-color: var(--orange);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.5em 3.5em;
+  border-radius: 20em;
+  margin-top: 5%;
+  transition: all 0.2s ease-in-out;
+}
+
+.left-side a:hover {
+  padding: 0.7em 3.7em;
+  background-color: black;
+}
+
+.right-side svg {
+  width: 30em;
+}
+
+@media (max-width: 700px) {
+  .container-home {
+    flex-direction: column-reverse;
+    height: auto;
+    text-align: center;
+  }
+
+  .right-side svg {
+    width: 20em;
+    margin: 3em auto 1.5em;
+  }
+
+  .left-side h2 {
+    font-size: 2.3rem;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+
+  .left-side p {
+    display: none;
+  }
+
+  .left-side {
+    margin-bottom: 3em;
+  }
+}
+
+/* Topic CSS <================================ */
+.container-topic {
+  padding: 0 25%;
+  margin: 4.5em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.container-topic h1 {
+  font-size: 2.5rem;
+  margin: 3.7em 0 1em;
+  color: var(--green);
+}
+
+.search-topic input {
+  width: 20em;
+  font-size: 1.2rem;
+  padding: 1em 1em;
+  border-radius: 15px;
+  border: solid 1px #a1a1a1;
+  margin-bottom: 1.5em;
+}
+
+.container-topic ul {
+  margin-bottom: 3.3em;
+}
+
+.container-topic li {
+  list-style: none;
+  margin: 1.8em 0;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.topic-item {
+  text-decoration: none;
+  color: white;
+  background-color: var(--orange);
+  border-radius: 10px;
+  padding: 0.5em 1em;
+  margin: 0 0.3em 0 0;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.5rem;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+}
+
+.topic-item:hover {
+  background-color: var(--green);
+}
+
+.myanswer {
+  text-decoration: none;
+  color: white;
+  background-color: var(--green);
+  border-radius: 10px;
+  padding: 0.6em 0.7em;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.myanswer-yet {
+  text-decoration: none;
+  color: white;
+  background-color: #a1a1a1;
+  border-radius: 10px;
+  padding: 0.6em 0.7em;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.myanswer-yet svg {
+  fill: white;
+}
+
+.myanswer svg {
+  fill: white;
+}
+
+.myanswer svg:nth-of-type(1) {
+  display: none;
+}
+
+.myanswer:hover svg:nth-of-type(1) {
+  display: block;
+}
+
+.myanswer:hover svg:nth-of-type(2) {
+  display: none;
+}
+
+.myanswer:hover {
+  background-color: black;
+}
+
+.pagination{
+  margin-bottom: 3em;
+}
+
+.step-links a{
+  text-decoration: none;
+  background: var(--blue);
+  padding: .4em .8em;
+  color: white;
+  border-radius: 5px;
+}
+
+.step-links a:hover{
+  background: #000;
+}
+
+@media (max-width: 700px) {
+
+  .container-topic {
+    padding: 0 10%;
+  }
+
+  .container-topic h1 {
+    font-size: 2rem;
+  }
+
+  .search-topic input {
+    width: 90%;
+    padding: 5% 1em;
+  }
+}
+
+/* Exercise CSS <================================ */
+
+.container_exercise {
+  display: flex;
+  flex-direction: column;
+  margin: 4em 30% 1.5em;
+  height: 100%;
+  text-align: left;
+}
+
+.container_exercise h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin: 2em 0 0.5em;
+}
+
+.answer_form img {
+  width: 70%;
+  border-radius: 8px;
+}
+
+.question {
+  margin: 1em 0 2em;
+}
+
+.answer_input {
+  text-align: center;
+}
+
+.answer_input textarea {
+  width: 100%;
+  height: 10em;
+  resize: none;
+  border: solid 2px #a1a1a1;
+  border-radius: 15px;
+  margin: 0 0 1em 0;
+  font-family: "MADE Tommy Soft", sans-serif;
+  padding: 1em 1em;
+}
+
+.answer_input input {
+  background-color: var(--blue);
+  width: 7em;
+  height: 2.5em;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: width 0.3s ease;
+}
+
+.answer_input input:hover {
+  width: 7.8em;
+  cursor: pointer;
+}
+
+.feedback_section {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1em auto;
+}
+
+#feedback {
+  color: var(--green);
+  margin-bottom: 2em;
+  opacity: 0;
+  /* animation-name: appear;
+    animation-duration: 2s; */
+}
+/* 
+@keyframes appear{
+    0%{color: white;}
+    100%{color: var(--green)}
+} */
+
+.next {
+  display: block;
+  background-color: var(--green);
+  text-decoration: none;
+  padding: 0.4em 0.5em;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 6em;
+  margin: 0 auto;
+  border-radius: 20px;
+  text-align: center;
+  transition: width 0.3s ease;
+}
+
+.next:hover {
+  width: 6.9em;
+  cursor: pointer;
+}
+
+.question_progress {
+  text-align: center;
+  font-size: small;
+  color: #a0a0a0;
+  margin-top: 1em;
+  font-weight: 400;
+}
+
+.progress {
+  content: "";
+  width: 100%;
+  height: 1em;
+  background-color: #d8d8d8;
+  border-radius: 15px;
+  position: relative;
+}
+
+.progress_orange {
+  content: "";
+  height: 1em;
+  background-color: var(--orange);
+  border-radius: 15px;
+  position: relative;
+  top: -1em;
+}
+
+.loader {
+  width: 3em; /* control the size */
+  aspect-ratio: 8/5;
+  position: relative;
+  margin: auto;
+  --_g: no-repeat radial-gradient(#000 68%,#0000 71%);
+  -webkit-mask: var(--_g),var(--_g),var(--_g);
+  -webkit-mask-size: 25% 40%;
+  background: var(--green);
+  animation: load 2s infinite;
+}
+
+@keyframes load {
+  0%    {-webkit-mask-position: 0% 0%  ,50% 0%  ,100% 0%  }
+  16.67%{-webkit-mask-position: 0% 100%,50% 0%  ,100% 0%  }
+  33.33%{-webkit-mask-position: 0% 100%,50% 100%,100% 0%  }
+  50%   {-webkit-mask-position: 0% 100%,50% 100%,100% 100%}
+  66.67%{-webkit-mask-position: 0% 0%  ,50% 100%,100% 100%}
+  83.33%{-webkit-mask-position: 0% 0%  ,50% 0%  ,100% 100%}
+  100%  {-webkit-mask-position: 0% 0%  ,50% 0%  ,100% 0%  }
+}
+
+@media (max-width: 700px) {
+  .container_exercise {
+    margin: 2.8em 8% 1.5em;
+  }
+
+  .container_exercise h1 {
+    font-size: 2rem;
+    margin-bottom: 1em;
+  }
+
+  .answer_form img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .answer_input textarea {
+    width: 90%;
+    border-radius: 8px;
+  }
+}
+
+/* Over CSS <================================ */
+
+.container_end {
+  display: flex;
+  flex-direction: column;
+  margin: 3em 30%;
+  height: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.ended {
+  fill: var(--green);
+  animation-name: flowUp;
+  animation-duration: 1.5s;
+}
+
+@keyframes flowUp {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.congrats {
+  font-size: 2.5em;
+  margin: 1em 0;
+}
+
+.p_ended {
+  font-size: 1.2em;
+}
+
+.home_link,
+.topic_link {
+  color: #0b87c2;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.home_link:hover,
+.topic_link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .container_end {
+    margin: 3em 5%;
+  }
+
+  .congrats {
+    font-size: 2em;
+  }
+
+  .p_ended {
+    font-size: 1.3em;
+  }
+}
+
+/* myResult CSS <================================ */
+
+.myResult-container {
+  padding: 0 10%;
+  margin: 7em 0 0;
+  align-items: center;
+  height: 94vh;
+  text-align: center;
+}
+
+.myResult-container h1 {
+  color: var(--green);
+  font-size: 3rem;
+}
+
+.myResult-container span {
+  margin: 0.8em 0;
+  background-color: var(--orange);
+  color: white;
+  border-radius: 25px;
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 0.2em 0.5em;
+  display: inline-flex;
+}
+
+.myResult-table {
+  margin: 0 auto;
+  width: 80%;
+  height: 60%;
+  text-align: left;
+  border: solid 1px var(--green);
+  padding: 0 1em 1em;
+  border-radius: 10px;
+  display: block;
+  overflow-x: auto;
+}
+
+.myResult-table th,
+.myResult-table td {
+  padding: 1em 1.5em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.myResult-table tr:nth-child(even) {
+  background-color: #e3ffd6;
+}
+
+.myResult-table-header th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, white 80%, transparent);
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.myResult-container p {
+  color: var(--blue);
+  font-size: 2rem;
+  margin-top: 1em;
+  font-weight: 500;
+}
+
+.myResult-container p span {
+  background-color: var(--blue);
+  color: white;
+  border-radius: 50px;
+  padding: 0.3em;
+}
+
+@media (max-width: 700px) {
+  .myResult-container {
+    padding: 0 2%;
+  }
+
+  .myResult-container h1 {
+    font-size: 2.2rem;
+  }
+
+  .myResult-container span {
+    font-size: 1.7rem;
+  }
+
+  .myResult-table {
+    width: 97%;
+    margin-top: 1em;
+  }
+
+  .myResult-table th,
+  .myResult-table td {
+    font-size: 0.9rem;
+  }
+
+  .myResult-container p {
+    margin-top: .7em;
+  }
+}
+
+/* topicList CSS <================================ */
+.topicList-container {
+  padding: 0 25%;
+  margin: 8em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.topicList-container h1 {
+  margin-bottom: 1em;
+  font-size: 3rem;
+  color: var(--green);
+}
+
+.add-topic {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8em 1em;
+  background-color: var(--green);
+  border-radius: 25px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-topic svg {
+  fill: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-topic span {
+  opacity: 0;
+  display: none;
+  padding-left: 0.1em;
+  color: white;
+  font-weight: 500;
+  font-size: 1.3rem;
+  transition: all 0.5s ease-in-out;
+}
+
+.add-topic:hover {
+  background-color: black;
+}
+
+.add-topic:hover svg {
+  margin-right: 0.6em;
+}
+
+.add-topic:hover span {
+  display: block;
+  opacity: 1;
+}
+
+.topicList-container ul {
+  margin-bottom: 3em;
+}
+
+.topicList-container li {
+  list-style: none;
+  margin: 2em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.students-answer {
+  text-decoration: none;
+  color: white;
+  background-color: var(--green);
+  border-radius: 10px;
+  padding: 0.5em 0.7em;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  margin-right: .2em;
+}
+
+.students-answer svg {
+  fill: white;
+}
+
+.students-answer:hover {
+  background-color: black;
+}
+
+.delete-topic {
+  text-decoration: none;
+  color: white;
+  background-color: #ff6851;
+  border-radius: 10px;
+  padding: 0.5em 0.7em;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.delete-topic svg {
+  fill: white;
+}
+
+.delete-topic:hover {
+  background-color: black;
+}
+
+@media (max-width: 700px) {
+  .topicList-container{
+    padding: 0 5%;
+  }
+
+  .topicList-container h1 {
+    font-size: 2.8rem;
+  }
+}
+
+/* studentsAnswer CSS <================================ */
+
+.studentsAnswer-container {
+  padding: 0 10%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.studentsAnswer-container h1 {
+  color: var(--green);
+  font-size: 3rem;
+}
+
+.studentsAnswer-container span {
+  margin: 0.8em 0;
+  background-color: var(--orange);
+  color: white;
+  border-radius: 25px;
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 0.2em 0.5em;
+  display: inline-flex;
+}
+
+.studentsAnswer-table {
+  margin: 0 auto;
+  width: 80%;
+  height: 50%;
+  text-align: left;
+  border: solid 1px var(--green);
+  padding: 0 1em 1em;
+  border-radius: 10px;
+  display: block;
+  overflow-x: auto;
+}
+
+.studentsAnswer-table th,
+.studentsAnswer-table td {
+  padding: 1em 1.5em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.stundentsAnswer-table-header th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, white 80%, transparent);
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.studentsAnswer-table tr:nth-child(even) {
+  background-color: #e3ffd6;
+}
+
+.download-answers {
+  background-color: var(--blue);
+  color: white;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  display: inline-block;
+  padding: 0.5em 0.9em;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.download-answers:hover {
+  background-color: black;
+}
+
+@media (max-width: 700px) {
+  .studentsAnswer-container {
+    padding: 0 7%;
+  }
+  
+  .studentsAnswer-container h1 {
+    font-size: 2.2rem;
+  }
+  
+  .studentsAnswer-container span {
+    font-size: 1.8rem;
+  }
+  
+  .studentsAnswer-table {
+    width: 100%;
+  }
+  
+  .studentsAnswer-table th,
+  .studentsAnswer-table td {
+    font-size: .9rem;
+  }
+}
+
+/* questionList CSS <================================ */
+
+.questionList-container {
+  padding: 0 30%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.questionList-container h1 {
+  color: var(--green);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+
+.questionList-container h1 span {
+  color: white;
+  background-color: var(--orange);
+  font-size: 1.8rem;
+  font-weight: 500;
+  padding: 0.3em 0.5em;
+  border-radius: 25px;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  border: solid 2px var(--green);
+  margin: 1.7em 0;
+  padding: 1em;
+  box-shadow: 0px 5px 3px var(--green);
+  border-radius: 10px;
+  position: relative;
+  z-index: 0;
+}
+
+.question-list img {
+  width: 70%;
+  border-radius: 10px;
+}
+
+.question-list p {
+  padding-top: 1.3em;
+  padding-bottom: 3em;
+}
+
+.edit-question {
+  display: inline-flex;
+  position: absolute;
+  bottom: 0;
+  width: 1em;
+  left: 44%;
+  margin-bottom: 0.7em;
+  fill: white;
+  padding: 0.5em;
+  background-color: var(--green);
+  border-radius: 25px;
+}
+
+.edit-question:hover {
+  background-color: black;
+}
+
+.delete-question {
+  display: inline-flex;
+  position: absolute;
+  bottom: 0;
+  width: 1em;
+  right: 44%;
+  margin-bottom: 0.7em;
+  fill: white;
+  padding: 0.5em;
+  background-color: #ff6851;
+  border-radius: 25px;
+}
+
+.delete-question:hover {
+  background-color: black;
+}
+
+.questionList-container form {
+  border: solid 2px var(--green);
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+  padding: 2em;
+  margin-bottom: 2em;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.questionList-container form label {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.questionList-container form textarea {
+  resize: none;
+  border: solid 0.7px var(--green);
+  border-radius: 10px;
+  padding: 0.8em;
+}
+
+.questionList-container form input::file-selector-button {
+  background-color: var(--green);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 0.8em;
+  color: white;
+  font-weight: 600;
+}
+
+.questionList-container form input[type="text"] {
+  border: solid 0.7px var(--green);
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.questionList-container form input[type="submit"] {
+  border: none;
+  width: 10em;
+  color: white;
+  padding: 0.7em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  background-color: var(--green);
+  cursor: pointer;
+  margin: auto;
+}
+
+@media (max-width: 700px) {
+  .questionList-container {
+    padding: 0 4%;
+  }
+
+  .questionList-container h1 {
+    font-size: 2.2rem;
+  }
+  
+  .questionList-container h1 span {
+    font-size: 1.8rem;
+  }  
+
+  .edit-question {
+    left: 40%;
+  }
+  
+  .delete-question {
+    right: 40%;
+  }
+}
+
+/* loginForm CSS <================================ */
+
+.loginForm-container {
+  padding: 0 35%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.loginForm-page {
+  border: solid 1px var(--green);
+  padding: 3em;
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+  margin-top: 10em;
+}
+
+.loginForm-page h1 {
+  margin-bottom: 1.5em;
+  color: var(--green);
+}
+
+.loginForm-container form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.loginForm-container form label {
+  margin-bottom: 0.3em;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--green);
+}
+
+.loginForm-container form input[type="text"],
+.loginForm-container form input[type="password"] {
+  margin-bottom: 1em;
+  padding: 0.8em;
+  border-radius: 8px;
+  border: solid 0.7px var(--green);
+  font-size: 1em;
+}
+
+.loginForm-container form input[type="submit"] {
+  background-color: var(--green);
+  width: 40%;
+  border: none;
+  margin: 1em auto 0;
+  padding: 0.6em;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+}
+
+.loginForm-container form input[type="submit"]:hover {
+  background-color: black;
+  transition: all 0.2s ease-in-out;
+}
+
+.loginForm-container p {
+  margin: 2em 0 0;
+  color: rgb(98, 98, 98);
+  font-weight: 400;
+}
+
+.loginForm-container p a {
+  text-decoration: none;
+  color: var(--green);
+}
+
+.loginForm-container p a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .loginForm-container {
+    padding: 0 5%;
+  }
+
+  .loginForm-page {
+    margin-top: 10em;
+  }
+}
+
+/* registerForm CSS <================================ */
+
+.registerForm-container {
+  padding: 0 35%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.registerForm-page {
+  border: solid 1px var(--green);
+  padding: 3em;
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+  margin-top: 10em;
+  margin-bottom: 4em;
+}
+
+.registerForm-page h1 {
+  margin-bottom: 1.5em;
+  color: var(--green);
+}
+
+.registerForm-container form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.registerForm-container form label {
+  margin-bottom: 0.3em;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--green);
+}
+
+.registerForm-container form p input {
+  margin-bottom: 1em;
+  padding: 0.8em;
+  border-radius: 8px;
+  border: solid 0.7px var(--green);
+  font-size: 1em;
+  width: 90%;
+}
+
+.registerForm-container form button {
+  background-color: var(--green);
+  width: 40%;
+  border: none;
+  margin: 1em auto 0;
+  padding: 0.6em;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+}
+
+.registerForm-container form button:hover {
+  background-color: black;
+  transition: all 0.2s ease-in-out;
+}
+
+.registerForm-container form ul {
+  margin: 0 0 0.8em 2em;
+}
+
+.registerForm-container form ul li {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgb(98, 98, 98);
+}
+
+.registerForm-container p {
+  margin: .8em 0 0;
+  color: rgb(98, 98, 98);
+  font-weight: 400;
+}
+
+.registerForm-container p a {
+  text-decoration: none;
+  color: var(--green);
+}
+
+.registerForm-container p a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .registerForm-container {
+    padding: 0 5%;
+  }
+
+  .registerForm-page {
+    margin-top: 8em;
+  }
+}
+/* createTopic CSS <================================ */
+
+.createTopic-container {
+  padding: 0 35%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.createTopic-page {
+  border: solid 1px var(--green);
+  padding: 3em;
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+  margin-top: 55%;
+  margin-bottom: 4em;
+}
+
+.createTopic-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.createTopic-container form label {
+  margin-bottom: 0.7em;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--green);
+}
+
+.createTopic-container form input[type="text"] {
+  margin-bottom: 1em;
+  padding: 0.8em;
+  border-radius: 8px;
+  border: solid 0.7px var(--green);
+  font-size: 1em;
+}
+
+.createTopic-container form input[type="submit"] {
+  margin-bottom: 1em;
+  padding: 0.8em;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--green);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.createTopic-container form input[type="submit"]:hover {
+  background-color: black;
+}
+
+@media (max-width: 700px) {
+  .createTopic-container {
+    padding: 0 8%;
+  }
+}
+
+/* updateQuestion CSS <================================ */
+
+.updateQuestion-container {
+  padding: 0 30%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+}
+
+.updateQuestion-container h1 {
+  color: var(--green);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+
+.updateQuestion-container form {
+  border: solid 2px var(--green);
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+  padding: 2em;
+  margin-bottom: 2em;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.updateQuestion-container form label {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.updateQuestion-container form textarea {
+  resize: none;
+  border: solid 0.7px var(--green);
+  border-radius: 10px;
+  padding: 0.8em;
+}
+
+.updateQuestion-container form input::file-selector-button {
+  background-color: var(--green);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 0.8em;
+  color: white;
+  font-weight: 600;
+}
+
+.updateQuestion-container form input[type="text"] {
+  border: solid 0.7px var(--green);
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.updateQuestion-container form input[type="submit"] {
+  border: none;
+  width: 10em;
+  color: white;
+  padding: 0.7em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  background-color: var(--green);
+  cursor: pointer;
+  margin: auto;
+}
+
+@media (max-width: 700px) {
+  .updateQuestion-container {
+    padding: 0 5%;
+  }
+
+  .updateQuestion-container h1 {
+    font-size: 2.2rem;
+  }
+  
+}
+
+/* delete CSS <================================ */
+
+.delete-container {
+  padding: 0 30%;
+  margin: 7em 0 0;
+  align-items: center;
+  text-align: center;
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+}
+
+.delete-container form {
+  border: solid 1px var(--green);
+  padding: 3em 3em 2.7em;
+  border-radius: 10px;
+  box-shadow: 0px 5px 3px var(--green);
+}
+
+.delete-container form p {
+  margin-bottom: 1em;
+}
+
+.delete-container form p span {
+  color: #ff6851;
+  font-style: italic;
+}
+
+.delete-container form a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.delete-container form a:hover {
+  text-decoration: underline;
+}
+
+.delete-container form input[type="submit"] {
+  background-color: #ff6851;
+  color: white;
+  border: none;
+  padding: 0.5em;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+
+.delete-container form input[type="submit"]:hover {
+  background-color: black;
+}
+
+@media (max-width: 700px) {
+  .delete-container{
+    padding: 0 5%;
+    margin: 3em 0 0;
+  }  
+}

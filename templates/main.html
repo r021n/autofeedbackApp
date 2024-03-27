@@ -1,25 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <title>Mentor AI</title>
 </head>
-<style>
-    .table-monitor {
-      border-collapse: collapse;
-      border-spacing: 0;
-      width: 200%;
-      border: 1px solid #ddd;
-    }
-    
-    th, td {
-      text-align: left;
-      padding: 8px;
-    }
-    
-    tr:nth-child(even){background-color: #f2f2f2}
-    </style>
 <body>
     {% include 'navbar.html' %}
 
@@ -35,4 +22,5 @@
 
     {% endblock %}
 </body>
+<script src="{% static 'js/app.js' %}"></script>
 </html>
