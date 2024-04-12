@@ -204,13 +204,6 @@ def exercise(request, pk, number):
         except:
             return HttpResponseServerError('terjadi masalah saat request API')
 
-        # generation_config = {
-        # "temperature": 0.9,
-        # "top_p": 1,
-        # "top_k": 1,
-        # "max_output_tokens": 8192,
-        # }
-
         safety_settings = [
             {
                 "category": "HARM_CATEGORY_HARASSMENT",
@@ -232,6 +225,7 @@ def exercise(request, pk, number):
 
         model = genai.GenerativeModel(model_name="gemini-1.0-pro-001",
                                     safety_settings=safety_settings)
+
         soal = question.question
         jawaban = request.POST.get('answer', None)
         
@@ -241,16 +235,14 @@ def exercise(request, pk, number):
 
             question_image = question.image_description
             # masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan saran perbaikan jawaban(maksimal 50 karakter) dan Skor(tulis 1 digit antara 0 sampai 5): "
-            masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan skor : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
+            masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
             
             response = model.generate_content(masukan, generation_config=genai.types.GenerationConfig(candidate_count=1, top_p=0.7, top_k=4, max_output_tokens=100, temperature=1))
-            print(response.prompt_feedback)
-            feedback_temporary = to_markdown(response.text)
+            # print(response.prompt_feedback)
+            feedback_temporary = response.text
             feedback_fix = removeStar(feedback_temporary)
             print(feedback_fix, '<< the feedback')
             
-            
-            time.sleep(3)
             try:
                 user_score = int(extract_score(feedback_fix))
             except:
@@ -290,7 +282,7 @@ def myResult(request, pk):
         score += result.score
     
     try:
-        totalScore = int(score / (5*len(results))*100)
+        totalScore = int(score / (3*len(results))*100)
     except:
         totalScore = 0
 
@@ -371,7 +363,7 @@ def studentsAnswer(request, pk):
             row_data.append(data['answers'].get(question.question, ''))
             row_data.append(data['feedback'].get(question.question, ''))
             user_score += data['score'].get(question.question, 0)
-        final_score = int(user_score / (5 * len(questions)) * 100)
+        final_score = int(user_score / (3 * len(questions)) * 100)
         row_data.append(final_score)
         row_table.append(row_data)
 
@@ -431,7 +423,7 @@ def downloadAnswer(request, pk):
             row_data.append(answer_text)
             row_data.append(feedback_text)
             
-        final_score = int(user_score / (5 * len(Questions.objects.filter(topic=topic))) * 100)
+        final_score = int(user_score / (3 * len(Questions.objects.filter(topic=topic))) * 100)
         row_data.append(final_score)
         worksheet.append(row_data)
 
