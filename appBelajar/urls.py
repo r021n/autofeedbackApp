@@ -5,6 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("", views.index, name='home'),
+    path("about/", views.about, name='about'),
     path("topics/", views.topics, name='topics'),
     path("exercise/<int:pk>/<int:number>/", views.exercise, name='exercise'),
     path("over/", views.exerciseOver, name='exerciseOver'),

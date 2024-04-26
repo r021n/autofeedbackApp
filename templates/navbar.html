@@ -10,7 +10,7 @@
             </label>
               <ul class="menu">
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="/">Tentang</a></li>
+                <li><a href="{% url 'about' %}">Tentang</a></li>
                 {% if user.is_superuser %}
                 <li><a href="{% url 'topicList' %}">Manage</a></li>
                 {% endif %}

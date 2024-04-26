@@ -22,6 +22,9 @@ import openpyxl
 def index(request):
     return render(request, 'appBelajar/index.html')
 
+def about(request):
+    return render(request, 'appBelajar/about.html')
+
 def topics(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     topics = Topics.objects.filter(Q(name__icontains=q)).order_by('-id')

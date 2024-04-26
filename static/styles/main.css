@@ -268,6 +268,118 @@
   }
 }
 
+/* About CSS <================================ */
+.about-container{
+  margin-top: 8em;
+  margin-bottom: 4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-logo{
+  width: 30%;
+  margin: 2em auto 5em;
+}
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 70%;
+  margin: auto;
+}
+
+.accordion .accordion-item {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.accordion .accordion-item .accordion-item-description-wrapper hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  visibility: visible;
+}
+
+.accordion .accordion-item.open .accordion-item-description-wrapper hr {
+  visibility: visible;
+}
+
+.accordion .accordion-item .accordion-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  background: var(--orange);
+  cursor: pointer;
+}
+
+.accordion .accordion-item .accordion-item-header .accordion-item-header-title {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.accordion .accordion-item .accordion-item-header .accordion-item-header-icon {
+  transition: var(--transition);
+}
+
+.accordion
+  .accordion-item.open
+  .accordion-item-header
+  .accordion-item-header-icon {
+  transform: rotate(-180deg);
+}
+
+.accordion .accordion-item .accordion-item-description-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.accordion .accordion-item.open .accordion-item-description-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.accordion
+  .accordion-item
+  .accordion-item-description-wrapper
+  .accordion-item-description {
+  min-height: 0;
+}
+
+.accordion
+  .accordion-item
+  .accordion-item-description-wrapper
+  .accordion-item-description
+  p {
+  padding: 10px;
+  line-height: 1.5;
+}
+
+.accordion
+  .accordion-item
+  .accordion-item-description-wrapper
+  .accordion-item-description
+  ul,  .accordion-item
+  .accordion-item-description-wrapper
+  .accordion-item-description
+  ol{
+  padding: 10px 0 10px 20px;
+  line-height: 1.5;
+}
+  
+  @media (max-width: 700px) {
+    .about-logo{
+      width: 70%;
+    }
+    .accordion {
+      max-width: 90%;
+    }
+  }
+
 /* Topic CSS <================================ */
 .container-topic {
   padding: 0 25%;
