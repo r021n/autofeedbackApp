@@ -19,6 +19,11 @@ pip install -r requirements.txt
 ```
 
 # Running the App
+
+## Make file api.txt on appBelajar directory
+Paste the GEMINI API here
+
+## Run app
 ```bash
 python manage.py runserver
 ```
