@@ -578,6 +578,12 @@
   margin: 1em auto;
 }
 
+.button_section{
+  display: grid;
+  grid-auto-flow: column;
+  gap: 2px;
+}
+
 #feedback {
   color: var(--green);
   margin-bottom: 2em;
@@ -592,7 +598,7 @@
 } */
 
 .next {
-  display: block;
+  display: inline;
   background-color: var(--green);
   text-decoration: none;
   padding: 0.4em 0.5em;
@@ -607,6 +613,26 @@
 }
 
 .next:hover {
+  width: 6.9em;
+  cursor: pointer;
+}
+
+.back {
+  display: inline;
+  background-color: var(--orange);
+  text-decoration: none;
+  padding: 0.4em 0.5em;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 6em;
+  margin: 0 auto;
+  border-radius: 20px;
+  text-align: center;
+  transition: width 0.3s ease;
+}
+
+.back:hover {
   width: 6.9em;
   cursor: pointer;
 }
@@ -1216,7 +1242,7 @@
 
 .loginForm-container {
   padding: 0 35%;
-  margin: 7em 0 0;
+  margin: 7em 0 2em;
   align-items: center;
   text-align: center;
 }
@@ -1369,7 +1395,6 @@
 .registerForm-container form ul li {
   font-size: 0.8rem;
   font-weight: 400;
-  color: rgb(98, 98, 98);
 }
 
 .registerForm-container p {
@@ -1385,6 +1410,27 @@
 
 .registerForm-container p a:hover {
   text-decoration: underline;
+}
+
+.appro{
+  display: none;
+}
+
+.condition{
+  color: tomato;
+}
+
+.passConfirm{
+  display: none;
+}
+
+.showElement{
+  display: block;
+  color: tomato;
+}
+
+.redBorder{
+  background: #ffd1b8;
 }
 
 @media (max-width: 700px) {

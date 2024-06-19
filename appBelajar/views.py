@@ -14,8 +14,8 @@ from django.core.paginator import Paginator
 
 import re
 import time
-import textwrap
-import google.generativeai as genai
+import vertexai
+from vertexai.language_models import TextGenerationModel
 import openpyxl
 
 # Create your views here.
@@ -188,46 +188,26 @@ def exercise(request, pk, number):
         user_score = 0
         
         # API played
-        def to_markdown(text):
-            text = text.replace('•', '  *')
-            return textwrap.indent(text, '> ', predicate=lambda _: True)
+        # def to_markdown(text):
+        #     text = text.replace('•', '  *')
+        #     return textwrap.indent(text, '> ', predicate=lambda _: True)
         
         # The API key
-        apiKey= ""
+        # apiKey= ""
 
-        with open('appBelajar/api.txt', 'r') as api:
-            apiKey= str(api.read())
-        
-        genai.configure(api_key=apiKey)
+        # with open('appBelajar/api.txt', 'r') as api:
+        #     apiKey= str(api.read())
 
-        try:
-            for m in genai.list_models():
-                if 'generateContent' in m.supported_generation_methods:
-                    print(m.name)
-        except:
-            return HttpResponseServerError('terjadi masalah saat request API')
-
-        safety_settings = [
-            {
-                "category": "HARM_CATEGORY_HARASSMENT",
-                "threshold": "BLOCK_NONE",
-            },
-            {
-                "category": "HARM_CATEGORY_HATE_SPEECH",
-                "threshold": "BLOCK_NONE",
-            },
-            {
-                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                "threshold": "BLOCK_NONE",
-            },
-            {
-                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                "threshold": "BLOCK_NONE",
-            },
-        ]
-
-        model = genai.GenerativeModel(model_name="gemini-1.0-pro-001",
-                                    safety_settings=safety_settings)
+        vertexai.init(project="330493213565", location="us-central1")
+        parameters = {
+            "candidate_count": 1,
+            "max_output_tokens": 1024,
+            "temperature": 0.2,
+            "top_p": 0.8,
+            "top_k": 40
+        }
+        model = TextGenerationModel.from_pretrained("text-bison@001")
+        model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
 
         soal = question.question
         jawaban = request.POST.get('answer', None)
@@ -240,11 +220,16 @@ def exercise(request, pk, number):
             # masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan saran perbaikan jawaban(maksimal 50 karakter) dan Skor(tulis 1 digit antara 0 sampai 5): "
             masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
             
-            response = model.generate_content(masukan, generation_config=genai.types.GenerationConfig(candidate_count=1, top_p=0.7, top_k=4, max_output_tokens=100, temperature=1))
-            # print(response.prompt_feedback)
+            # respon from LLM
+            response = model.predict(
+                    masukan,
+                    **parameters
+            )
+
             feedback_temporary = response.text
             feedback_fix = removeStar(feedback_temporary)
             print(feedback_fix, '<< the feedback')
+            print(masukan)
             
             try:
                 user_score = int(extract_score(feedback_fix))
@@ -275,6 +260,7 @@ def exercise(request, pk, number):
 def exerciseOver(request):
     return render(request, 'appBelajar/over.html')
 
+@login_required(login_url='loginPage')
 def myResult(request, pk):
 
     results = Answers.objects.filter(user=request.user, topic_id=pk)
@@ -297,6 +283,8 @@ def registerPage(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
+        else:
+            redirect("registerPage")
 
         return redirect("loginPage")
     else:

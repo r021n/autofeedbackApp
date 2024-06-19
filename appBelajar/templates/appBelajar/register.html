@@ -4,19 +4,31 @@
 <div class="registerForm-container">
     <div class="registerForm-page">
         <h1>Buat Akun</h1>
-        <form action="" method="POST">
+        <form action="" onsubmit="return registValid()" method="POST">
             {% csrf_token %}
 
             {% for field in form %}
             <label for="room_name">{{field.label}}</label>
-            <p>{{field}}</p>
-            {% if forloop.counter == 3 %}
+            {% if forloop.counter == 1 %}
+            <p><input type="{{ field.widget.attrs.type }}" id="username_input" name="{{ field.name }}" placeholder="Tulis tanpa ada spasi" {{ field.widget.attrs }}></p>
             <ul>
-                <li>password harus lebih dari 8 huruf</li>
-                <li>password harus mengandung angka</li>
-                <li>password harus mengandung huruf kapital</li>
+                <li class="passConfirm" id="userConfirm">Jangan ada spasi</li>
             </ul>
+            {% else %}
+                <p>{{ field }}</p>
+                {% if forloop.counter == 3 %}
+                <ul>
+                    <li class="condition" id="condition1">Password harus lebih dari 8 huruf</li>
+                    <li class="condition" id="condition2">Password tidak boleh seluruhnya berupa angka.</li>
+                    <li class="condition" id="condition3">Jangan jadikan username menjadi password</li>
+                </ul>
+                {% elif forloop.counter == 4 %}
+                <ul>
+                    <li class="passConfirm" id="passConfirm">Password belum sama dengan password sebelumnya</li>
+                </ul>
+                {% endif %}
             {% endif %}
+            
             {% endfor %}
 
             <button type="submit" class="btn-register">Buat Akun</button>
