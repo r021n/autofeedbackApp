@@ -1,14 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import FileResponse, HttpResponse, HttpResponseServerError
 from django.db import connection
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Sum, Count
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Topics, Questions, Answers
 from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
 from collections import defaultdict
 from django.core.paginator import Paginator
 
@@ -26,235 +25,176 @@ def about(request):
     return render(request, 'appBelajar/about.html')
 
 def topics(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q', '')
     topics = Topics.objects.filter(Q(name__icontains=q)).order_by('-id')
     paginator = Paginator(topics, 5)
-
-    page_number = request.GET.get("page")
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context = {'page_obj':page_obj}
+    context = {'page_obj': page_obj}
     return render(request, 'appBelajar/topics.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def topicList(request):
-    
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q', '')
     topics = Topics.objects.filter(Q(name__icontains=q)).order_by('-id')
     paginator = Paginator(topics, 5)
-
-    page_number = request.GET.get("page")
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context = {'page_obj':page_obj}
+    context = {'page_obj': page_obj}
     return render(request, 'appBelajar/topicList.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def createTopic(request):
-    
-    
     if request.method == 'POST':
-        
-        topic = Topics(name=request.POST['topic'])
-        topic.save()
-        
-        topics = Topics.objects.all().last()
-        return redirect('questionList', topics.id)
-        
-    context = {}
-    return render(request, 'appBelajar/createTopic.html', context)
+        topic = Topics.objects.create(name=request.POST['topic'])
+        return redirect('questionList', topic.id)
+
+    return render(request, 'appBelajar/createTopic.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def deleteTopic(request, pk):
-    
-    topic = Topics.objects.get(id=pk)
-    
+    topic = get_object_or_404(Topics, id=pk)
+
     if request.method == 'POST':
         topic.delete()
         return redirect('topicList')
-    
-    context = {'obj':topic}
-    return render(request, 'appBelajar/delete.html', context)
+
+    return render(request, 'appBelajar/delete.html', {'obj': topic})
 
 @user_passes_test(lambda u: u.is_superuser)
 def questionList(request, pk):
-    
-    questions = Questions.objects.filter(topic_id=pk)
-    
-    topic = Topics.objects.get(id=pk)
-    
+    topic = get_object_or_404(Topics, id=pk)
+    questions = Questions.objects.filter(topic=topic)
+
     if request.method == 'POST':
         question_body = request.POST['question']
         image_description = request.POST['imageDescription']
-        image = ''
-        
-        if 'image' in request.FILES:
-            image = request.FILES['image']
-        else:
-            image = None
-                
-        question = Questions(topic=topic, question=question_body, image=image, image_description=image_description)
-        question.save()
-        return redirect('questionList', pk)
-    
-    context = {'questions': questions, 'topic':topic}
+        image = request.FILES.get('image')
+
+        question = Questions.objects.create(
+            topic=topic,
+            question=question_body,
+            image=image,
+            image_description=image_description
+        )
+        return redirect('questionList', pk=topic.pk)
+
+    context = {'questions': questions, 'topic': topic}
     return render(request, 'appBelajar/questionList.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def updateQuestion(request, pk):
-    
-    question = Questions.objects.get(id=pk)
-    
+    question = get_object_or_404(Questions, id=pk)
+
     if request.method == 'POST':
         question_body = request.POST['question']
         image_description = request.POST['imageDescription']
-        
-        if 'image' in request.FILES:
-            image = request.FILES['image']
+        image = request.FILES.get('image')
+
+        if image:
             question.image.delete()
             question.image = image
 
         question.question = question_body
         question.image_description = image_description
         question.save()
-        return redirect('questionList', question.topic_id)
-    
-    context = {'question':question}
-    return render(request, 'appBelajar/updateQuestion.html', context)
+        return redirect('questionList', pk=question.topic.pk)
+
+    return render(request, 'appBelajar/updateQuestion.html', {'question': question})
 
 @user_passes_test(lambda u: u.is_superuser)
 def deleteQuestion(request, pk):
-    
-    question = Questions.objects.get(id=pk)
-    
+    question = get_object_or_404(Questions, id=pk)
+
     if request.method == 'POST':
+        topic_id = question.topic.pk
         question.delete()
-        return redirect('questionList', question.topic_id)
-    
-    context = {'obj':question}
-    return render(request, 'appBelajar/delete.html', context)
+        return redirect('questionList', pk=topic_id)
+
+    return render(request, 'appBelajar/delete.html', {'obj': question})
 
 @login_required(login_url='loginPage')
 def exercise(request, pk, number):
-    questions = Questions.objects.filter(topic_id=pk)
-    questions_length = len(questions)
-    number = number
-    question = questions[number-1]
-    
     topic = Topics.objects.get(id=pk)
-    
-    # regular expression function
+    questions = Questions.objects.filter(topic=topic)
+    question = questions[number - 1]
+
     def extract_score(text):
-        # Buat regex pattern
-        pattern = r"(?<=Skor:\s)(\d+)"
-        pattern2 = r"(r'\d+(?!.*\d)')"
-        pattern3 = r"(?i)skor\s*(\d+)"
+        patterns = [
+            r"(?<=Skor:\s)(\d+)",
+            r"(r'\d+(?!.*\d)')",
+            r"(?i)skor\s*(\d+)"
+        ]
 
-        # Temukan semua kecocokan dalam teks
-        matches = re.search(pattern, text)
-        matches2 = re.search(pattern2, text)
-        matches3 = re.search(pattern3, text)
+        for pattern in patterns:
+            match = re.search(pattern, text)
+            if match:
+                return match.group(1)
 
-        # Jika ada kecocokan, kembalikan angka
-        if matches:
-            return matches.group(1)
-        elif matches2: 
-            return matches2.group(1)
-        elif matches3: 
-            return matches3.group(1)
-
-        # Jika tidak ada kecocokan, kembalikan string kosong
         return ""
-    
+
     def extract_feedback(text):
-        # Hapus semua karakter ">"
         text = re.sub(r">", "", text)
-
-        # Hapus "skor" dan angka setelahnya
         text = re.sub(r"Skor:\s*\d+", "", text)
-
-        # Hapus spasi di awal dan akhir teks
-        text = text.strip()
-
-        return text
+        return text.strip()
 
     def removeStar(text):
-        pattern = r"\*"
-        kalimat_tanpa_tanda_bintang = re.sub(pattern, "", text)
-        return kalimat_tanpa_tanda_bintang
-    
-    # handle form
+        return re.sub(r"\*", "", text)
+
     if request.method == "POST":
-        
         feedback = ""
         user_score = 0
-        
-        # API played
-        # def to_markdown(text):
-        #     text = text.replace('•', '  *')
-        #     return textwrap.indent(text, '> ', predicate=lambda _: True)
-        
-        # The API key
-        # apiKey= ""
+        answer = request.POST.get('answer', "")
 
-        # with open('appBelajar/api.txt', 'r') as api:
-        #     apiKey= str(api.read())
-
-        vertexai.init(project="330493213565", location="us-central1")
-        parameters = {
-            "candidate_count": 1,
-            "max_output_tokens": 1024,
-            "temperature": 0.2,
-            "top_p": 0.8,
-            "top_k": 40
-        }
-        model = TextGenerationModel.from_pretrained("text-bison@001")
-        model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
-
-        soal = question.question
-        jawaban = request.POST.get('answer', None)
-        
-        if jawaban == "" or jawaban.isspace():
-            umpan_balik= "Kamu belum memasukkan jawaban"
+        if not answer.strip():
+            feedback = "Kamu belum memasukkan jawaban"
         else:
+            vertexai.init(project="330493213565", location="us-central1")
+            parameters = {
+                "candidate_count": 1,
+                "max_output_tokens": 1024,
+                "temperature": 0.2,
+                "top_p": 0.8,
+                "top_k": 40
+            }
+            model = TextGenerationModel.from_pretrained("text-bison@001")
+            model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
 
             question_image = question.image_description
-            # masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan saran perbaikan jawaban(maksimal 50 karakter) dan Skor(tulis 1 digit antara 0 sampai 5): "
-            masukan = f"gambar: {question_image}, soal: {soal}, jawaban: {jawaban}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
-            
-            # respon from LLM
-            response = model.predict(
-                    masukan,
-                    **parameters
-            )
-
+            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
+            response = model.predict(prompt, **parameters)
             feedback_temporary = response.text
             feedback_fix = removeStar(feedback_temporary)
-            print(feedback_fix, '<< the feedback')
-            print(masukan)
-            
+
             try:
                 user_score = int(extract_score(feedback_fix))
-            except:
+            except ValueError:
                 user_score = 0
+
             feedback = extract_feedback(feedback_fix)
-            # try:
-            # except:
-            #     return HttpResponse('feedback tak diberikan')
-        
-        # save the gained data
-        answer = Answers.objects.create(
-            user = request.user,
-            topic = topic,
-            question = question,
-            answer = jawaban,
-            feedback = feedback,
-            score = user_score,
+
+        answer_obj, created = Answers.objects.get_or_create(
+            user=request.user,
+            topic=topic,
+            question=question,
+            defaults={
+                'answer': answer,
+                'feedback': feedback,
+                'score': user_score,
+            }
         )
 
-        topic.participants.add(request.user)
-        
-    user_answer = Answers.objects.filter(topic_id=pk, user=request.user, question=question).first()
-    
-    context = {'questions':questions, 'questions_length':questions_length, 'question':question, 'number':number, 'user_answer':user_answer}
+        if created:
+            topic.participants.add(request.user)
+
+    user_answer = Answers.objects.filter(topic=topic, user=request.user, question=question).first()
+    context = {
+        'questions': questions,
+        'questions_length': len(questions),
+        'question': question,
+        'number': number,
+        'user_answer': user_answer
+    }
     return render(request, 'appBelajar/exercise.html', context)
 
 def exerciseOver(request):
@@ -262,58 +202,51 @@ def exerciseOver(request):
 
 @login_required(login_url='loginPage')
 def myResult(request, pk):
-
-    results = Answers.objects.filter(user=request.user, topic_id=pk)
     topic = Topics.objects.get(id=pk)
-    score = 0
+    results = Answers.objects.filter(user=request.user, topic=topic)
 
-    for result in results:
-        score += result.score
-    
-    try:
-        totalScore = int(score / (3*len(results))*100)
-    except:
-        totalScore = 0
+    score_sum = results.aggregate(Sum('score'))['score__sum'] or 0
+    question_count = results.count()
 
-    context = {'results': results, 'score': totalScore, 'topic':topic}
+    if question_count > 0:
+        total_score = int((score_sum / (3 * question_count)) * 100)
+    else:
+        total_score = 0
+
+    context = {'results': results, 'score': total_score, 'topic': topic}
     return render(request, 'appBelajar/myResult.html', context)
 
-def registerPage(response):
-    if response.method == "POST":
-        form = RegisterForm(response.POST)
+def registerPage(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-        else:
-            redirect("registerPage")
-
-        return redirect("loginPage")
+            return redirect('loginPage')
     else:
         form = RegisterForm()
 
-    return render(response, "appBelajar/register.html", {"form":form})
+    return render(request, 'appBelajar/register.html', {'form': form})
 
 def loginPage(request):
-    
     if request.user.is_authenticated:
         return redirect('home')
-    
+
     if request.method == 'POST':
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        
-        try:
-            user = User.objects.get(username=username)
-        except:
-            messages.error(request, "Akun tidak ditemukan")
-        
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, "username atau password salah")
-    
+            messages.error(request, 'Username atau password salah')
+    else:
+        try:
+            User.objects.get(username=request.POST.get('username'))
+        except User.DoesNotExist:
+            messages.error(request, 'Akun tidak ditemukan')
+
     return render(request, 'appBelajar/loginForm.html')
 
 @login_required(login_url='loginPage')
@@ -325,18 +258,11 @@ def logoutPage(request):
 def studentsAnswer(request, pk):
     topic = Topics.objects.get(id=pk)
     q = request.GET.get('q', '')
-    filtered_answers = Answers.objects.filter(Q(user__username__icontains=q), topic=topic)
+    filtered_answers = Answers.objects.filter(Q(user__username__icontains=q), topic=topic).select_related('user', 'question')
     questions = list(Questions.objects.filter(topic=topic))
 
-    def generate_header(questions):
-        headers = ['nama siswa']
-        for i, question in enumerate(questions, start=1):
-            headers.append(f"soal nomer {i}: {question.question}")
-            headers.append(f"Umpan Balik soal nomer {i}")
-        headers.append('nilai siswa')
-        return headers
-
-    headers = generate_header(questions)
+    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
+              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
 
     user_answers = defaultdict(lambda: {'answers': {}, 'feedback': {}, 'score': {}})
     for answer in filtered_answers:
@@ -363,32 +289,19 @@ def studentsAnswer(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser)
 def downloadAnswer(request, pk):
+    topic = get_object_or_404(Topics, id=pk)
+    filtered_answers = Answers.objects.filter(topic=topic).select_related('user', 'question')
+    questions = list(Questions.objects.filter(topic=topic))
 
-    try:
-        # Fetch the topic object based on the provided name
-        topic = Topics.objects.get(id=pk)
-    except Topics.DoesNotExist:
-        response.status_code = 404
-        return response
-
-    # Filter answers based on the chosen topic
-    filtered_answers = Answers.objects.filter(topic=topic)
-
-    # Create an Excel workbook and worksheet
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
 
-    # Create headers based on questions in the chosen topic
-    questions = [f"soal nomer {i+1}: {question.question}" for i, question in enumerate(Questions.objects.filter(topic=topic))]
-    feedbacks = [f"Umpan Balik soal nomer {i+1}" for i, question in enumerate(Questions.objects.filter(topic=topic))]
-    headers = ['nama siswa'] + [item for pair in zip(questions, feedbacks) for item in pair] + ['nilai siswa']
+    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
+              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
 
-    worksheet.append(headers)  # Add headers to the first row
+    worksheet.append(headers)
 
-    # Create a dictionary to store unique users and their answers
     user_answers = {}
-
-    # Iterate through answers and append user and answer data to rows
     for answer in filtered_answers:
         user = answer.user.username
         question_text = answer.question.question
@@ -403,27 +316,22 @@ def downloadAnswer(request, pk):
         user_answers[user]['feedback'][question_text] = feedback_text
         user_answers[user]['score'][question_text] = int(user_score)
 
-    # Iterate through unique users and their answers to populate the worksheet
     for user, data in user_answers.items():
         row_data = [user]
         user_score = 0
-        for question in Questions.objects.filter(topic=topic):
+        for question in questions:
             answer_text = data['answers'].get(question.question, '')
             feedback_text = data['feedback'].get(question.question, '')
             user_score += data['score'].get(question.question, 0)
             row_data.append(answer_text)
             row_data.append(feedback_text)
-            
-        final_score = int(user_score / (3 * len(Questions.objects.filter(topic=topic))) * 100)
+
+        final_score = int(user_score / (3 * len(questions)) * 100)
         row_data.append(final_score)
         worksheet.append(row_data)
 
-    # Prepare the response object
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    topic_name = topic.name
-    response['Content-Disposition'] = f'attachment; filename=Jawaban_siswa_{topic_name}.xlsx'
-
-    # Save the workbook to the response object
+    response['Content-Disposition'] = f'attachment; filename=Jawaban_siswa_{topic.name}.xlsx'
     workbook.save(response)
 
     return response
