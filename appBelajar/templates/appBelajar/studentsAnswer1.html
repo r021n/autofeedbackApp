@@ -7,6 +7,9 @@
     <form class="search-topic" action="" method="get">
         <input name="q" placeholder="Cari siswa">
     </form>
+    <a class="myResult-selected" id="myResult-chance1" href="{% url 'studentsAnswer1' topic.id %}">Kesempatan 1</a>
+    <a class="myResult-Nselected" id="myResult-chance2" href="{% url 'studentsAnswer2' topic.id %}">Kesempatan 2</a>
+    <a class="myResult-Nselected" id="myResult-chance3" href="{% url 'studentsAnswer3' topic.id %}">Kesempatan 3</a>
     <table class="studentsAnswer-table">
         <thead class="stundentsAnswer-table-header">
             {% for header in headers %}
@@ -22,6 +25,6 @@
         </tr>
         {% endfor %}
     </table>
-    <a href="{% url 'downloadAnswers' topic.id %}" class="download-answers">Unduh Jawaban Siswa</a>
+    <a href="{% url 'downloadAnswers1' topic.id %}" class="download-answers">Unduh Jawaban Siswa</a>
 </div>
 {% endblock %}

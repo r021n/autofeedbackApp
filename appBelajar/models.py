@@ -18,7 +18,29 @@ class Questions(models.Model):
     def __str__(self):
         return self.question
     
-class Answers(models.Model):
+class Answers1(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topics, on_delete=models.CASCADE)
+    answer = models.TextField(blank=True, null=True)
+    feedback = models.TextField(blank=True, null=True)
+    score = models.PositiveIntegerField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.answer} {self.feedback}"
+
+class Answers2(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topics, on_delete=models.CASCADE)
+    answer = models.TextField(blank=True, null=True)
+    feedback = models.TextField(blank=True, null=True)
+    score = models.PositiveIntegerField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.answer} {self.feedback}"
+
+class Answers3(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topics, on_delete=models.CASCADE)

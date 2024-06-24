@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container_exercise">
+    <h1>Jawab pertanyan berikut</h1>
+    <div class="answer_form">
+        {% if question.image %}
+        <img src="{{question.image.url}}" alt="">
+        {% endif %}
+
+        <p class="question">{{question.question}}</p>
+        <form class="answer_input" action="" method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <textarea class="disable" name="answer" id="answer" cols="30" rows="10" onpaste="return false">{{user_answer.answer}}</textarea>
+
+            {% if user_answer == None %}
+            <div class="submit-container">
+                <input type="submit" value="Submit">
+            </div>
+            {% endif %}
+        </form>
+        <div class="feedback_section">
+            <p inert class="feedback" id="feedback">{{user_answer.feedback}}</p>
+            <div class="button_section">
+                {% if user_answer != None %}
+                    {% if number > 1 %}
+                        <a class="back" href="{% url 'exercise2' question.topic_id number|add:-1 %}">Back</a>
+                    {% endif %}
+                    {% if number == questions_length %}
+                        <a class="next" href="{% url 'exerciseOver2' question.topic_id %}">Selesai</a>
+                    {% else %}
+                        <a class="next" href="{% url 'exercise2' question.topic_id number|add:1 %}">Next</a>
+                    {% endif %}
+    
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <p class="question_progress">soal ke <i id="question_now">{{number}}</i> dari <i id="total_question">{{questions_length}}</i> soal</p>
+    <div class="progress" id="progressBar"></div>
+    <div class="progress_orange"></div>
+</div>
+{% endblock %}

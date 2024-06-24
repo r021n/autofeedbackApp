@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="studentsAnswer-container">
+    <h1>Topik: <span>{{topic.name|title}}</span></h1>
+
+    <form class="search-topic" action="" method="get">
+        <input name="q" placeholder="Cari siswa">
+    </form>
+    <a class="myResult-Nselected" id="myResult-chance1" href="{% url 'studentsAnswer1' topic.id %}">Kesempatan 1</a>
+    <a class="myResult-selected" id="myResult-chance2" href="{% url 'studentsAnswer2' topic.id %}">Kesempatan 2</a>
+    <a class="myResult-Nselected" id="myResult-chance3" href="{% url 'studentsAnswer3' topic.id %}">Kesempatan 3</a>
+    <table class="studentsAnswer-table">
+        <thead class="stundentsAnswer-table-header">
+            {% for header in headers %}
+            <th>{{header}}</th>
+            {% endfor %}
+        </thead>
+
+        {% for rows in row_data %}
+        <tr>
+            {% for row in rows %}
+            <td>{{row}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'downloadAnswers2' topic.id %}" class="download-answers">Unduh Jawaban Siswa</a>
+</div>
+{% endblock %}

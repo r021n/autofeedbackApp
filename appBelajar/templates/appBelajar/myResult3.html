@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="myResult-container">
+    <h1>Topik: <span>{{topic|title}}</span></h1>
+    <a class="myResult-Nselected" id="myResult-chance1" href="{% url 'myResult1' topic.id %}">Kesempatan 1</a>
+    <a class="myResult-Nselected" id="myResult-chance2" href="{% url 'myResult2' topic.id %}">Kesempatan 2</a>
+    <a class="myResult-selected" id="myResult-chance3" href="{% url 'myResult3' topic.id %}">Kesempatan 3</a>
+    <table class="myResult-table">
+        <thead class="myResult-table-header">
+            <th>Soal</th>
+            <th>Jawabanku</th>
+            <th>Umpan Balik</th>
+            <th>Skor</th>
+        </thead>
+
+        {% for result in results %}
+        <tr>
+            <td>{{result.question}}</td>
+            <td>{{result.answer}}</td>
+            <td>{{result.feedback}}</td>
+            <td>{{result.score}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>Skor Total: <span>{{score}}</span></p>
+</div>
+{% endblock %}

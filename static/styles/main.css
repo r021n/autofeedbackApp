@@ -716,13 +716,18 @@
   text-align: center;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 }
 
 .ended {
-  fill: var(--green);
+  background-color: var(--blue);
+  color: white;
+  padding: .5em .6em;
+  font-size: 7rem;
+  border-radius: 50%;
   animation-name: flowUp;
   animation-duration: 1.5s;
+  margin: .3em 0;
 }
 
 @keyframes flowUp {
@@ -735,8 +740,16 @@
 }
 
 .congrats {
-  font-size: 2.5em;
+  font-size: 2.5rem;
   margin: 1em 0;
+}
+
+.score_header{
+  font-size: 1.8rem;
+  background-color: var(--orange);
+  padding: .2em .5em;
+  border-radius: 25px;
+  color: white;
 }
 
 .p_ended {
@@ -796,6 +809,29 @@
   display: inline-flex;
 }
 
+#myResult-chance1, #myResult-chance2, #myResult-chance3{
+  text-decoration: none;
+  font-size: 1rem;
+  padding: .2em .4em;
+  font-weight: 500;
+  color: white;
+  margin-bottom: .3em;
+  border-radius: 5px;
+}
+
+#myResult-chance1:hover, #myResult-chance2:hover, #myResult-chance3:hover{
+  background-color: #2f2f2f;
+}
+
+.myResult-selected{
+  background-color: #2f2f2f;
+  pointer-events: none;
+}
+
+.myResult-Nselected{
+  background-color: var(--green);
+}
+
 .myResult-table {
   margin: 0 auto;
   width: 80%;
@@ -839,7 +875,7 @@
   background-color: var(--blue);
   color: white;
   border-radius: 50px;
-  padding: 0.3em;
+  padding: .3em .4em;
 }
 
 @media (max-width: 700px) {
@@ -1639,4 +1675,35 @@
     padding: 0 5%;
     margin: 3em 0 0;
   }  
+}
+
+/* chance CSS <================================ */
+.chance-container{
+  margin-top: 35vh;
+  height: 70vh;
+}
+
+.chance-container a{
+  display: block;
+  justify-content: center;
+  text-align: center;
+  font-size: 2rem;
+  text-decoration: none;
+  font-weight: 500;
+  color: white;
+  background-color: var(--orange);
+  border-radius: 20px;
+  padding: .5em .9em;
+  margin: .7em auto;
+  width: 40%;
+}
+
+.chance-container a:hover{
+  background-color: #000;
+}
+
+@media (max-width: 700px) {
+  .chance-container a{
+    width: 70%;  
+  }
 }

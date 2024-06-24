@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="chance-container">
+        <a href="{% url 'exercise1' topic.id 1 %}">Kesempatan 1</a>
+        <a href="{% url 'exercise2' topic.id 1 %}">Kesempatan 2</a>
+        <a href="{% url 'exercise3' topic.id 1 %}">Kesempatan 3</a>
+</div>
+{% endblock %}

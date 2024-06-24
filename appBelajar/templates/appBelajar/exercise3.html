@@ -24,12 +24,12 @@
             <div class="button_section">
                 {% if user_answer != None %}
                     {% if number > 1 %}
-                        <a class="back" href="{% url 'exercise' question.topic_id number|add:-1 %}">Back</a>
+                        <a class="back" href="{% url 'exercise3' question.topic_id number|add:-1 %}">Back</a>
                     {% endif %}
                     {% if number == questions_length %}
-                        <a class="next" href="{% url 'exerciseOver' %}">Selesai</a>
+                        <a class="next" href="{% url 'exerciseOver3' question.topic_id %}">Selesai</a>
                     {% else %}
-                        <a class="next" href="{% url 'exercise' question.topic_id number|add:1 %}">Next</a>
+                        <a class="next" href="{% url 'exercise3' question.topic_id number|add:1 %}">Next</a>
                     {% endif %}
     
                 {% endif %}

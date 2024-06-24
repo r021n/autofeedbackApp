@@ -15,7 +15,7 @@
     <ul>
         {% for topic in page_obj %}
         <li>
-            <a href="{% url 'questionList' topic.id %}" class="topic-item"><span>{{topic|title}}</span></a> <a href="{% url 'studentsAnswer' topic.id %}"
+            <a href="{% url 'questionList' topic.id %}" class="topic-item"><span>{{topic|title}}</span></a> <a href="{% url 'studentsAnswer1' topic.id %}"
                 class="students-answer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                     viewBox="0 0 24 24">
                     <path

@@ -68,6 +68,15 @@ document.querySelectorAll(".accordion-item").forEach((item) => {
   });
 });
 
+// untuk validasi form pembuatan soal
+function validateForm2() {
+  const questInput = document.getElementById("questionInput").value;
+  if (!questInput.length) {
+    alert("sepertinya masih ada yang belum terisi");
+    return false;
+  }
+}
+
 // for password confirmation 1
 let result1;
 
@@ -170,13 +179,4 @@ function registValid(){
     alert("sepertinya masih ada yang salah atau belum terisi!");
     return false;
   } else {return true;}
-}
-
-// untuk validasi form pembuatan soal
-function validateForm2() {
-  const questInput = document.getElementById("questionInput").value;
-  if (!questInput.length) {
-    alert("sepertinya masih ada yang belum terisi");
-    return false;
-  }
 }

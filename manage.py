@@ -3,6 +3,7 @@
 import os
 import sys
 
+os.environ["OPENBLAS_NUM_THREADS"] = "4"
 
 def main():
     """Run administrative tasks."""
