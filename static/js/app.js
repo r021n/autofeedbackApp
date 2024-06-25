@@ -142,7 +142,7 @@ function passConfirm2(arg){
     condPass1.classList.remove("showElement")
     password2Raw.classList.remove("redBorder")
   
-    if (!found && password2.length) {
+    if ((!found && password2.length) || (!(password2.length == password1.length) && password2.length)) {
       condPass1.classList.add("showElement")
       password2Raw.classList.add("redBorder")
       result2 = false;
