@@ -1683,7 +1683,7 @@
   height: 70vh;
 }
 
-.chance-container a{
+.chance-completed{
   display: block;
   justify-content: center;
   text-align: center;
@@ -1698,12 +1698,28 @@
   width: 40%;
 }
 
-.chance-container a:hover{
+.chance-yet{
+  display: block;
+  justify-content: center;
+  text-align: center;
+  font-size: 2rem;
+  pointer-events: none;
+  text-decoration: none;
+  font-weight: 500;
+  color: white;
+  background-color: #ffd488;
+  border-radius: 20px;
+  padding: .5em .9em;
+  margin: .7em auto;
+  width: 40%;
+}
+
+.chance-completed:hover{
   background-color: #000;
 }
 
 @media (max-width: 700px) {
-  .chance-container a{
+  .chance-completed, .chance-yet{
     width: 70%;  
   }
 }

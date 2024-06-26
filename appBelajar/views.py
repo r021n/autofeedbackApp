@@ -35,7 +35,12 @@ def topics(request):
 
 def chance(request, pk):
     topic = Topics.objects.get(id=pk)
-    return render(request, 'appBelajar/chance.html', {'topic':topic})
+    totalQuestion = Questions.objects.filter(topic__id=pk)
+    answered1 = Answers1.objects.filter(user=request.user, topic__id=pk)
+    answered2 = Answers2.objects.filter(user=request.user, topic__id=pk)
+    answered3 = Answers3.objects.filter(user=request.user, topic__id=pk)
+    context = {'topic':topic, 'total':totalQuestion, 'answer1':answered1, 'answer2':answered2, 'answer3':answered3}
+    return render(request, 'appBelajar/chance.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def topicList(request):
@@ -417,7 +422,7 @@ def myResult1(request, pk):
     results = Answers1.objects.filter(user=request.user, topic=topic)
 
     score_sum = results.aggregate(Sum('score'))['score__sum'] or 0
-    question_count = results.count()
+    question_count = Questions.objects.filter(topic__id=pk).count()
 
     if question_count > 0:
         total_score = int((score_sum / (3 * question_count)) * 100)
@@ -433,7 +438,7 @@ def myResult2(request, pk):
     results = Answers2.objects.filter(user=request.user, topic=topic)
 
     score_sum = results.aggregate(Sum('score'))['score__sum'] or 0
-    question_count = results.count()
+    question_count = Questions.objects.filter(topic__id=pk).count()
 
     if question_count > 0:
         total_score = int((score_sum / (3 * question_count)) * 100)
@@ -449,7 +454,7 @@ def myResult3(request, pk):
     results = Answers3.objects.filter(user=request.user, topic=topic)
 
     score_sum = results.aggregate(Sum('score'))['score__sum'] or 0
-    question_count = results.count()
+    question_count = Questions.objects.filter(topic__id=pk).count()
 
     if question_count > 0:
         total_score = int((score_sum / (3 * question_count)) * 100)
@@ -504,8 +509,15 @@ def studentsAnswer1(request, pk):
     filtered_answers = Answers1.objects.filter(Q(user__username__icontains=q), topic=topic).select_related('user', 'question')
     questions = list(Questions.objects.filter(topic=topic))
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     user_answers = defaultdict(lambda: {'answers': {}, 'feedback': {}, 'score': {}})
     for answer in filtered_answers:
@@ -537,8 +549,15 @@ def studentsAnswer2(request, pk):
     filtered_answers = Answers2.objects.filter(Q(user__username__icontains=q), topic=topic).select_related('user', 'question')
     questions = list(Questions.objects.filter(topic=topic))
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     user_answers = defaultdict(lambda: {'answers': {}, 'feedback': {}, 'score': {}})
     for answer in filtered_answers:
@@ -570,8 +589,15 @@ def studentsAnswer3(request, pk):
     filtered_answers = Answers3.objects.filter(Q(user__username__icontains=q), topic=topic).select_related('user', 'question')
     questions = list(Questions.objects.filter(topic=topic))
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     user_answers = defaultdict(lambda: {'answers': {}, 'feedback': {}, 'score': {}})
     for answer in filtered_answers:
@@ -605,8 +631,15 @@ def downloadAnswer1(request, pk):
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     worksheet.append(headers)
 
@@ -654,8 +687,15 @@ def downloadAnswer2(request, pk):
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     worksheet.append(headers)
 
@@ -703,8 +743,15 @@ def downloadAnswer3(request, pk):
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
 
-    headers = ['Nama Siswa'] + [f"Soal Nomer {i+1}: {question.question}" for i, question in enumerate(questions)] + \
-              [f"Umpan Balik Soal Nomer {i+1}" for i, _ in enumerate(questions)] + ['Nilai Siswa']
+    def generate_header(questions):
+        headers = ['nama siswa']
+        for i, question in enumerate(questions, start=1):
+            headers.append(f"soal nomer {i}: {question.question}")
+            headers.append(f"Umpan Balik soal nomer {i}")
+        headers.append('nilai siswa')
+        return headers
+
+    headers = generate_header(questions)
 
     worksheet.append(headers)
 

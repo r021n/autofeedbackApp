@@ -2,8 +2,18 @@
 
 {% block content %}
 <div class="chance-container">
-        <a href="{% url 'exercise1' topic.id 1 %}">Kesempatan 1</a>
-        <a href="{% url 'exercise2' topic.id 1 %}">Kesempatan 2</a>
-        <a href="{% url 'exercise3' topic.id 1 %}">Kesempatan 3</a>
+        <a class="chance-completed" href="{% url 'exercise1' topic.id 1 %}">Kesempatan 1</a>
+
+        {% if answer1|length < total|length %}
+        <a class="chance-yet" href="{% url 'exercise2' topic.id 1 %}">Kesempatan 2</a>
+        {% else %}
+        <a class="chance-completed" href="{% url 'exercise2' topic.id 1 %}">Kesempatan 2</a>
+        {% endif %}
+
+        {% if answer2|length < total|length %}
+        <a class="chance-yet" href="{% url 'exercise3' topic.id 1 %}">Kesempatan 3</a>
+        {% else %}
+        <a class="chance-completed" href="{% url 'exercise3' topic.id 1 %}">Kesempatan 3</a>
+        {% endif %}
 </div>
 {% endblock %}
