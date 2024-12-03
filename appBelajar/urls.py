@@ -17,19 +17,15 @@ urlpatterns = [
     path("myResult1/<int:pk>/", views.myResult1, name='myResult1'),
     path("myResult2/<int:pk>/", views.myResult2, name='myResult2'),
     path("myResult3/<int:pk>/", views.myResult3, name='myResult3'),
-    
     path("registerPage/", views.registerPage, name='registerPage'),
     path("loginPage/", views.loginPage, name='loginPage'),
     path("logoutPage/", views.logoutPage, name='logoutPage'),
-    
     path("topicList/", views.topicList, name='topicList'),
     path("questionList/<int:pk>/", views.questionList, name='questionList'),
-    
     path("createTopic/", views.createTopic, name='createTopic'),
     path("deleteTopic/<int:pk>/", views.deleteTopic, name='deleteTopic'),
     path("deleteQuestion/<int:pk>/", views.deleteQuestion, name='deleteQuestion'),
     path("updateQuestion/<int:pk>/", views.updateQuestion, name='updateQuestion'),
-    
     path("studentsAnswer1/<int:pk>/", views.studentsAnswer1, name='studentsAnswer1'),
     path("studentsAnswer2/<int:pk>/", views.studentsAnswer2, name='studentsAnswer2'),
     path("studentsAnswer3/<int:pk>/", views.studentsAnswer3, name='studentsAnswer3'),

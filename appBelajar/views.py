@@ -13,13 +13,51 @@ from django.core.paginator import Paginator
 
 import re
 import time
-import vertexai
-from vertexai.language_models import TextGenerationModel
+import google.generativeai as genai
 import openpyxl
+
+# =============================================================================================================================
+
+
+
+# FUNCTION FOR SIMPLIFICATION
+def getFeedback(answer):
+    with open("appBelajar/api.txt") as my_file:
+        API = my_file.read()
+    genai.configure(api_key=API)
+
+    # Create the model
+    generation_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
+    }
+
+    model = genai.GenerativeModel(
+    model_name="tunedModels/trainingai3-desember-2024-3yfxz4du4z76",
+    generation_config=generation_config,
+    )
+
+    chat_session = model.start_chat(
+    history=[
+    ]
+    )
+
+    response = chat_session.send_message(answer)
+
+    print(response.text)
+
+    return response.text
+# =============================================================================================================================
 
 # Create your views here.
 def index(request):
+    # print ("current position", os.getcwd())
+    # print("File exists:", os.path.isfile('api.txt'))
     return render(request, 'appBelajar/index.html')
+
 
 def about(request):
     return render(request, 'appBelajar/about.html')
@@ -158,22 +196,10 @@ def exercise1(request, pk, number):
         if not answer.strip():
             feedback = "Kamu belum memasukkan jawaban"
         else:
-            vertexai.init(project="330493213565", location="us-central1")
-            parameters = {
-                "candidate_count": 1,
-                "max_output_tokens": 1024,
-                "temperature": 0.2,
-                "top_p": 0.8,
-                "top_k": 40
-            }
-            model = TextGenerationModel.from_pretrained("text-bison@001")
-            model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
-
             question_image = question.image_description
-            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
-            response = model.predict(prompt, **parameters)
-            feedback_temporary = response.text
-            feedback_fix = removeStar(feedback_temporary)
+            prompt = f"gambar/grafik/tabel: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3')"
+            
+            feedback_fix = removeStar(getFeedback(prompt))
 
             try:
                 user_score = int(extract_score(feedback_fix))
@@ -242,22 +268,10 @@ def exercise2(request, pk, number):
         if not answer.strip():
             feedback = "Kamu belum memasukkan jawaban"
         else:
-            vertexai.init(project="330493213565", location="us-central1")
-            parameters = {
-                "candidate_count": 1,
-                "max_output_tokens": 1024,
-                "temperature": 0.2,
-                "top_p": 0.8,
-                "top_k": 40
-            }
-            model = TextGenerationModel.from_pretrained("text-bison@001")
-            model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
-
             question_image = question.image_description
             prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
-            response = model.predict(prompt, **parameters)
-            feedback_temporary = response.text
-            feedback_fix = removeStar(feedback_temporary)
+            
+            feedback_fix = removeStar(getFeedback(prompt))
 
             try:
                 user_score = int(extract_score(feedback_fix))
@@ -326,22 +340,10 @@ def exercise3(request, pk, number):
         if not answer.strip():
             feedback = "Kamu belum memasukkan jawaban"
         else:
-            vertexai.init(project="330493213565", location="us-central1")
-            parameters = {
-                "candidate_count": 1,
-                "max_output_tokens": 1024,
-                "temperature": 0.2,
-                "top_p": 0.8,
-                "top_k": 40
-            }
-            model = TextGenerationModel.from_pretrained("text-bison@001")
-            model = model.get_tuned_model("projects/330493213565/locations/us-central1/models/8016513989347377152")
-
             question_image = question.image_description
             prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
-            response = model.predict(prompt, **parameters)
-            feedback_temporary = response.text
-            feedback_fix = removeStar(feedback_temporary)
+
+            feedback_fix = removeStar(getFeedback(prompt))
 
             try:
                 user_score = int(extract_score(feedback_fix))
