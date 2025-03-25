@@ -13,7 +13,8 @@ from django.core.paginator import Paginator
 
 import re
 import time
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import openpyxl
 
 # =============================================================================================================================
@@ -24,32 +25,44 @@ import openpyxl
 def getFeedback(answer):
     with open("appBelajar/api.txt") as my_file:
         API = my_file.read()
-    genai.configure(api_key=API)
+    client = genai.Client(api_key=API)
 
-    # Create the model
-    generation_config = {
-    "temperature": 1,
-    "top_p": 0.95,
-    "top_k": 40,
-    "max_output_tokens": 8192,
-    "response_mime_type": "text/plain",
-    }
-
-    model = genai.GenerativeModel(
-    model_name="tunedModels/trainingai3-desember-2024-3yfxz4du4z76",
-    generation_config=generation_config,
+    response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[answer],
+    config=types.GenerateContentConfig(
+        max_output_tokens=100,
+        temperature=0.1
+        )
     )
-
-    chat_session = model.start_chat(
-    history=[
-    ]
-    )
-
-    response = chat_session.send_message(answer)
-
     print(response.text)
 
     return response.text
+
+    # # Create the model
+    # generation_config = {
+    # "temperature": 1,
+    # "top_p": 0.95,
+    # "top_k": 40,
+    # "max_output_tokens": 8192,
+    # "response_mime_type": "text/plain",
+    # }
+
+    # model = genai.GenerativeModel(
+    # model_name="tunedModels/trainingai3-desember-2024-3yfxz4du4z76",
+    # generation_config=generation_config,
+    # )
+
+    # chat_session = model.start_chat(
+    # history=[
+    # ]
+    # )
+
+    # response = chat_session.send_message(answer)
+
+    # print(response.text)
+
+    # return response.text
 # =============================================================================================================================
 
 # Create your views here.
@@ -197,7 +210,7 @@ def exercise1(request, pk, number):
             feedback = "Kamu belum memasukkan jawaban"
         else:
             question_image = question.image_description
-            prompt = f"gambar/grafik/tabel: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3')"
+            prompt = f"gambar/grafik/tabel: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik singkat dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3')"
             
             feedback_fix = removeStar(getFeedback(prompt))
 
@@ -269,7 +282,7 @@ def exercise2(request, pk, number):
             feedback = "Kamu belum memasukkan jawaban"
         else:
             question_image = question.image_description
-            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
+            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik singkat dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
             
             feedback_fix = removeStar(getFeedback(prompt))
 
@@ -341,7 +354,7 @@ def exercise3(request, pk, number):
             feedback = "Kamu belum memasukkan jawaban"
         else:
             question_image = question.image_description
-            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
+            prompt = f"gambar: {question_image}, soal: {question.question}, jawaban: {answer}, umpan balik singkat dan skor antara 1 sampai 3 : (contoh output yang diharapkan = 'Jawbanmu ...(kurang tepat atau sudah benar, sesuaikan dengan konteks), (Coba perhatikan kembali...., seuaikan konteks). Skor: 3') "
 
             feedback_fix = removeStar(getFeedback(prompt))
 
